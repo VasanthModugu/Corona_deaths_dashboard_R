@@ -1,0 +1,80 @@
+---
+title: "Covid-19"
+author: "Manikanta"
+date: "2024-03-24"
+output: html_document
+---
+
+````{r setup, include=FALSE}
+library(flexdashboard)
+library(plotly)
+
+# Your data (replace with your actual data)
+data <- read.csv(file.choose())
+```
+## R Markdown
+```{r data}
+summary(data)
+```
+
+## Including Plots
+
+#-> Chart 1: Analyze the distribution of COVID-19 confirmed cases among different countries to identify high-impact regions and inform resource allocation decisions.
+
+```{r pressure, echo=FALSE}
+plot_ly(data, labels = ~Country, values = ~Confirmed, type = 'pie', textposition = 'inside', textinfo = 'label+percent') %>%
+  layout(title = 'COVID-19 Confirmed Cases by Country')
+
+```
+
+
+#-> Chart 2:  Visualize and compare the distribution of confirmed, deaths, recovered, and active COVID-19 cases across different countries using a stacked bar chart to understand the pandemic's impact globally.
+```{r}
+plot_ly(data, x = ~Country, y = ~Confirmed, type = 'bar', name = 'Confirmed') %>%
+  add_trace(y = ~Deaths, name = 'Deaths') %>%
+  add_trace(y = ~Recovered, name = 'Recovered') %>%
+  add_trace(y = ~Active, name = 'Active') %>%
+  layout(title = 'Stacked Bar Chart',
+         xaxis = list(title = 'Country'),
+         yaxis = list(title = 'Count'),
+         barmode = 'stack')
+
+
+```
+
+#-> Chart 3:  Illustrate the proportion of confirmed cases and deaths across countries while comparing their distribution using a pie chart to understand the severity of the COVID-19 pandemic.
+
+```{r}
+plot_ly(data, labels = ~Country, values = ~Confirmed, type = "pie", name = "Confirmed") %>%
+  add_trace(values = ~Deaths, name = "Deaths") %>%
+  layout(title = "Confirmed Deaths vs Active",
+         showlegend = TRUE)
+
+```
+
+
+
+#-> Chart 4:Visualize the comparison between confirmed cases and deaths across different countries using a grouped bar chart to gain insights into the impact of COVID-19 on various regions.
+
+```{r}
+plot_ly(data, x = ~Country, y = ~Confirmed, type = 'bar', name = 'Confirmed') %>%
+  add_trace(y = ~Deaths, name = 'Deaths') %>%
+  layout(title = 'Bar Chart Comparison',
+         xaxis = list(title = 'Country'),
+         yaxis = list(title = 'Count'),
+         barmode = 'group')
+
+```
+
+
+#-> Chart 5:  Explore the distribution of deaths per 100 COVID-19 cases across regions to understand the severity and variability of fatality rates.
+
+```{r}
+ggplot(data, aes(x = Deaths100Cases)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  labs(title = "Distribution of Deaths per 100 Cases",
+       x = "Deaths per 100 Cases",
+       y = "Frequency") +
+  theme_minimal()
+
+```
